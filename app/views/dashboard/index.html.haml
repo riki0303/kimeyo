@@ -2,9 +2,8 @@
 
 %p ログインに成功しました！
 
-%p
-  現在ログイン中のユーザー: 
-  %strong= current_user.email
+%p= "現在ログイン中のユーザー: "
+%strong= current_user.email
 
 = button_to "ログアウト", destroy_user_session_path, method: :delete, class: "btn btn-danger"
 
