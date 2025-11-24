@@ -80,4 +80,9 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+
+  # RSpec testing framework [https://rspec.info/]
+  gem "rspec-rails"
+  # Factory for creating test data [https://github.com/thoughtbot/factory_bot]
+  gem "factory_bot_rails"
 end
