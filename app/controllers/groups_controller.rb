@@ -4,7 +4,7 @@ class GroupsController < ApplicationController
 
   def index
     group_ids = current_user.group_ids
-    @groups = Group.where(id: group_ids).includes(:members)
+    @groups = Group.where(id: group_ids)
   end
 
   def show
@@ -49,7 +49,7 @@ class GroupsController < ApplicationController
   private
 
   def set_group
-    @group = current_user.groups.find_by(id: params[:id])
+    @group = current_user.groups.find(params[:id])
   end
 
   def group_params
