@@ -63,9 +63,6 @@ group :development, :test do
 
   # Interactive debugging console [https://github.com/pry/pry]
   gem "pry"
-
-  # Detect N+1 queries and unused eager loading [https://github.com/flyerhzm/bullet]
-  gem "bullet"
 end
 
 group :development do
@@ -74,6 +71,9 @@ group :development do
 
   # Rails best practices checker [https://github.com/flyerhzm/rails_best_practices]
   gem "rails_best_practices", require: false
+
+  # Detect N+1 queries and unused eager loading [https://github.com/flyerhzm/bullet]
+  gem "bullet"
 end
 
 group :test do
