@@ -23,7 +23,7 @@ class GroupsController < ApplicationController
       @group.group_memberships.create!(user: current_user)
       redirect_to @group, notice: 'グループが作成されました。'
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -34,7 +34,7 @@ class GroupsController < ApplicationController
     if @group.update(group_params)
       redirect_to @group, notice: 'グループが更新されました。'
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
