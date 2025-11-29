@@ -2,8 +2,10 @@
 
 .d-flex.gap-2.mb-4
   = link_to "一覧に戻る", groups_path, class: "btn btn-secondary"
-  = link_to "編集", edit_group_path(@group), class: "btn btn-primary"
-  = button_to "削除", group_path(@group), method: :delete, class: "btn btn-danger", data: { turbo_confirm: "本当に削除しますか？" }
+  - if policy(@group).edit?
+    = link_to "編集", edit_group_path(@group), class: "btn btn-primary"
+  - if policy(@group).destroy?
+    = button_to "削除", group_path(@group), method: :delete, class: "btn btn-danger", form: { data: { turbo_confirm: "本当に削除しますか？" } }
 
 .card.mb-4
   .card-header
