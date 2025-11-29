@@ -3,19 +3,21 @@ class GroupsController < ApplicationController
   before_action :set_group, only: [:show, :edit, :update, :destroy]
 
   def index
-    group_ids = current_user.group_ids
-    @groups = Group.where(id: group_ids)
+    @groups = policy_scope(Group)
   end
 
   def show
+    authorize @group
   end
 
   def new
     @group = current_user.owned_groups.build
+    authorize @group
   end
 
   def create
     @group = current_user.owned_groups.build(group_params)
+    authorize @group
 
     # TODO: モデルメソッドとして定義
     if @group.save
@@ -28,9 +30,11 @@ class GroupsController < ApplicationController
   end
 
   def edit
+    authorize @group
   end
 
   def update
+    authorize @group
     if @group.update(group_params)
       redirect_to @group, notice: 'グループが更新されました。'
     else
@@ -39,6 +43,7 @@ class GroupsController < ApplicationController
   end
 
   def destroy
+    authorize @group
     if @group.destroy
       redirect_to groups_path, notice: 'グループが削除されました。'
     else
