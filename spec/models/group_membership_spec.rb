@@ -44,4 +44,3 @@ RSpec.describe GroupMembership, type: :model do
     end
   end
 end
-

@@ -34,4 +34,3 @@ RSpec.describe 'Groups', type: :system do
     expect(page).not_to have_content('更新されたグループ')
   end
 end
-
