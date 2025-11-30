@@ -19,10 +19,8 @@ class GroupsController < ApplicationController
     @group = current_user.owned_groups.build(group_params)
     authorize @group
 
-    # TODO: モデルメソッドとして定義
     if @group.save
-      # 作成者もメンバーとして追加
-      @group.group_memberships.create!(user: current_user)
+      @group.add_owner_as_member
       redirect_to @group, notice: 'グループが作成されました。'
     else
       render :new, status: :unprocessable_content

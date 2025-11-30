@@ -1,4 +1,3 @@
-# TODO: リクエストスペック内容確認、pundit対応
 RSpec.describe 'Groups', type: :request do
   # ユーザー
   let!(:user) { create(:user) }
