@@ -48,6 +48,9 @@ gem "haml-rails"
 # Flexible authentication solution for Rails [https://github.com/heartcombo/devise]
 gem "devise"
 
+# Authorization library for Rails [https://github.com/varvet/pundit]
+gem "pundit"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -63,9 +66,6 @@ group :development, :test do
 
   # Interactive debugging console [https://github.com/pry/pry]
   gem "pry"
-
-  # Detect N+1 queries and unused eager loading [https://github.com/flyerhzm/bullet]
-  gem "bullet"
 end
 
 group :development do
@@ -74,6 +74,9 @@ group :development do
 
   # Rails best practices checker [https://github.com/flyerhzm/rails_best_practices]
   gem "rails_best_practices", require: false
+
+  # Detect N+1 queries and unused eager loading [https://github.com/flyerhzm/bullet]
+  gem "bullet"
 end
 
 group :test do
