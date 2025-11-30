@@ -12,4 +12,3 @@ class Group < ApplicationRecord
     group_memberships.create!(user: owner)
   end
 end
-

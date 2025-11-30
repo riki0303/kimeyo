@@ -77,4 +77,3 @@ RSpec.describe GroupPolicy, type: :policy do
     end
   end
 end
-

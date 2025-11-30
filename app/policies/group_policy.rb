@@ -31,7 +31,6 @@ class GroupPolicy < ApplicationPolicy
     record.owner == user
   end
 
-
   def destroy?
     # グループのオーナーであること
     record.owner == user

@@ -100,7 +100,7 @@ RSpec.describe 'Groups', type: :request do
           expect {
             post groups_path, params: invalid_params
           }.not_to change(Group, :count)
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(response.body).to include('グループ名を入力してください')
         end
       end
