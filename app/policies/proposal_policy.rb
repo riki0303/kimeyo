@@ -1,6 +1,6 @@
 class ProposalPolicy < ApplicationPolicy
   def index?
-    is_group_member?
+    true
   end
 
   def show?

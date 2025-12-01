@@ -3,7 +3,8 @@ class ProposalsController < ApplicationController
 
   def index
     @group = current_user.groups.find(params[:group_id])
-    authorize Proposal.new(group: @group)
+    # グループのメンバーであること
+    authorize @group, :show?, policy_class: GroupPolicy
     @proposals = policy_scope(Proposal).preload(:user).order(created_at: :desc)
   end
 
