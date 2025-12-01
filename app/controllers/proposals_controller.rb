@@ -4,7 +4,7 @@ class ProposalsController < ApplicationController
   def index
     @group = current_user.groups.find(params[:group_id])
     authorize Proposal.new(group: @group)
-    @proposals = policy_scope(Proposal).where(group: @group).order(created_at: :desc)
+    @proposals = policy_scope(Proposal).preload(:user).order(created_at: :desc)
   end
 
   def show
@@ -16,14 +16,12 @@ class ProposalsController < ApplicationController
   def new
     @group = current_user.groups.find(params[:group_id])
     @proposal = @group.proposals.build
-    @proposal.user = current_user
     authorize @proposal
   end
 
   def create
     @group = current_user.groups.find(params[:group_id])
-    @proposal = @group.proposals.build(proposal_params)
-    @proposal.user = current_user
+    @proposal = @group.proposals.build(proposal_params.merge(user: current_user))
     authorize @proposal
 
     if @proposal.save
