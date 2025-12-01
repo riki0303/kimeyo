@@ -37,7 +37,7 @@ class ProposalPolicy < ApplicationPolicy
   end
 
   private
-  
+
   # グループのメンバーであること
   def is_group_member?
     record.group.group_memberships.exists?(user_id: user.id)
@@ -48,4 +48,3 @@ class ProposalPolicy < ApplicationPolicy
     record.user == user || record.group.owner == user
   end
 end
-
