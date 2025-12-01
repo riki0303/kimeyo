@@ -15,7 +15,9 @@ Rails.application.routes.draw do
 
   get 'dashboard', to: 'dashboard#index'
 
-  resources :groups
+  resources :groups do
+    resources :proposals
+  end
 
   # Devise routes will be added after User model is generated
 end
