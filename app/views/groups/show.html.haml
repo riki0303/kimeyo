@@ -2,6 +2,7 @@
 
 .d-flex.gap-2.mb-4
   = link_to "一覧に戻る", groups_path, class: "btn btn-secondary"
+  = link_to "提案一覧", group_proposals_path(@group), class: "btn btn-info"
   - if policy(@group).edit?
     = link_to "編集", edit_group_path(@group), class: "btn btn-primary"
   - if policy(@group).destroy?

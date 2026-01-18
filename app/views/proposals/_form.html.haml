@@ -1,0 +1,20 @@
+- if @proposal.errors.any?
+  #error_explanation.alert.alert-danger
+    %h5 エラーが発生しました
+    %ul.mb-0
+      - @proposal.errors.full_messages.each do |message|
+        %li= message
+
+= form_with model: [ @group, @proposal ], local: true, class: "mb-3" do |f|
+  .mb-3
+    = f.label :title, "タイトル", class: "form-label"
+    = f.text_field :title, class: "form-control", placeholder: "提案のタイトルを入力してください"
+
+  .mb-3
+    = f.label :content, "内容", class: "form-label"
+    = f.text_area :content, class: "form-control", rows: 10, placeholder: "提案の内容を入力してください"
+
+  .d-flex.gap-2
+    = f.submit @proposal.new_record? ? "作成" : "更新", class: "btn btn-primary"
+    = link_to "キャンセル", group_proposals_path(@group), class: "btn btn-secondary"
+
