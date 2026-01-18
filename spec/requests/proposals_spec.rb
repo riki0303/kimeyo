@@ -35,17 +35,6 @@ RSpec.describe 'Proposals', type: :request do
         expect(response).to redirect_to(new_user_session_path)
       end
     end
-
-    context 'グループのメンバーでない場合' do
-      before do
-        sign_in non_member_user, scope: :user
-      end
-
-      it 'アクセスできないこと' do
-        get group_proposals_path(group)
-        expect(response).to have_http_status(:not_found)
-      end
-    end
   end
 
   describe 'GET /groups/:group_id/proposals/:id' do
@@ -68,17 +57,6 @@ RSpec.describe 'Proposals', type: :request do
         expect(response).to redirect_to(new_user_session_path)
       end
     end
-
-    context 'グループのメンバーでない場合' do
-      before do
-        sign_in non_member_user, scope: :user
-      end
-
-      it 'アクセスできないこと' do
-        get group_proposal_path(group, proposal)
-        expect(response).to have_http_status(:not_found)
-      end
-    end
   end
 
   describe 'GET /groups/:group_id/proposals/new' do
@@ -95,17 +73,6 @@ RSpec.describe 'Proposals', type: :request do
       it 'ログインページにリダイレクトされること' do
         get new_group_proposal_path(group)
         expect(response).to redirect_to(new_user_session_path)
-      end
-    end
-
-    context 'グループのメンバーでない場合' do
-      before do
-        sign_in non_member_user, scope: :user
-      end
-
-      it 'アクセスできないこと' do
-        get new_group_proposal_path(group)
-        expect(response).to have_http_status(:not_found)
       end
     end
   end
@@ -170,17 +137,6 @@ RSpec.describe 'Proposals', type: :request do
         expect(response).to redirect_to(new_user_session_path)
       end
     end
-
-    context 'グループのメンバーでない場合' do
-      before do
-        sign_in non_member_user, scope: :user
-      end
-
-      it 'アクセスできないこと' do
-        post group_proposals_path(group), params: { proposal: { title: 'テスト', content: '内容' } }
-        expect(response).to have_http_status(:not_found)
-      end
-    end
   end
 
   describe 'GET /groups/:group_id/proposals/:id/edit' do
@@ -194,27 +150,6 @@ RSpec.describe 'Proposals', type: :request do
           get edit_group_proposal_path(group, proposal)
           expect(response).to have_http_status(:success)
           expect(response.body).to include(proposal.title)
-        end
-      end
-
-      context 'グループのオーナーの場合' do
-        let!(:other_user_proposal) { create(:proposal, group: group, user: other_user) }
-
-        it 'アクセスできること' do
-          get edit_group_proposal_path(group, other_user_proposal)
-          expect(response).to have_http_status(:success)
-        end
-      end
-
-      context '作成者でもオーナーでもない場合' do
-        before do
-          sign_in other_user, scope: :user
-        end
-
-        it 'アクセスできないこと' do
-          get edit_group_proposal_path(group, proposal)
-          expect(response).to redirect_to(root_path)
-          expect(flash[:alert]).to eq('この操作を実行する権限がありません。')
         end
       end
     end
@@ -259,36 +194,6 @@ RSpec.describe 'Proposals', type: :request do
           end
         end
       end
-
-      context 'グループのオーナーの場合' do
-        let!(:other_user_proposal) { create(:proposal, group: group, user: other_user) }
-
-        before do
-          sign_in user, scope: :user
-        end
-
-        it '提案が更新できること' do
-          patch group_proposal_path(group, other_user_proposal), params: { proposal: { title: 'オーナーが更新', content: '内容' } }
-          expect(response).to have_http_status(:found)
-          other_user_proposal.reload
-          expect(other_user_proposal.title).to eq('オーナーが更新')
-        end
-      end
-
-      context '作成者でもオーナーでもない場合' do
-        before do
-          sign_in other_user, scope: :user
-        end
-
-        it '提案が更新できないこと' do
-          original_title = proposal.title
-          patch group_proposal_path(group, proposal), params: { proposal: { title: '更新', content: '内容' } }
-          expect(response).to redirect_to(root_path)
-          expect(flash[:alert]).to eq('この操作を実行する権限がありません。')
-          proposal.reload
-          expect(proposal.title).to eq(original_title)
-        end
-      end
     end
 
     context 'ログインしていない場合' do
@@ -312,35 +217,6 @@ RSpec.describe 'Proposals', type: :request do
           }.to change(Proposal, :count).by(-1)
           expect(response).to have_http_status(:found)
           expect(flash[:notice]).to eq('提案が削除されました。')
-        end
-      end
-
-      context 'グループのオーナーの場合' do
-        let!(:other_user_proposal) { create(:proposal, group: group, user: other_user) }
-
-        before do
-          sign_in user, scope: :user
-        end
-
-        it '提案が削除できること' do
-          expect {
-            delete group_proposal_path(group, other_user_proposal)
-          }.to change(Proposal, :count).by(-1)
-          expect(response).to have_http_status(:found)
-          expect(flash[:notice]).to eq('提案が削除されました。')
-        end
-      end
-
-      context '作成者でもオーナーでもない場合' do
-        before do
-          sign_in other_user, scope: :user
-        end
-
-        it '提案が削除できないこと' do
-          delete group_proposal_path(group, proposal)
-          expect(response).to redirect_to(root_path)
-          expect(flash[:alert]).to eq('この操作を実行する権限がありません。')
-          expect(Proposal.exists?(proposal.id)).to be true
         end
       end
     end

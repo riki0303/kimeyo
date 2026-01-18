@@ -9,7 +9,7 @@ RSpec.describe ProposalPolicy, type: :policy do
   let(:other_group) { create(:group, owner: other_user) }
   let(:other_proposal) { create(:proposal, group: other_group, user: other_user) }
 
-  permissions :index? do
+  permissions :index?, :show?, :create?, :new? do
     it 'グループのメンバーにアクセスを許可すること' do
       expect(subject).to permit(user, proposal)
       expect(subject).to permit(member, proposal)
@@ -20,48 +20,7 @@ RSpec.describe ProposalPolicy, type: :policy do
     end
   end
 
-  permissions :show? do
-    it 'グループのメンバーにアクセスを許可すること' do
-      expect(subject).to permit(user, proposal)
-      expect(subject).to permit(member, proposal)
-    end
-
-    it 'グループのメンバーでないユーザーにアクセスを拒否すること' do
-      expect(subject).not_to permit(other_user, proposal)
-    end
-  end
-
-  permissions :create?, :new? do
-    it 'グループのメンバーにアクセスを許可すること' do
-      expect(subject).to permit(user, proposal)
-      expect(subject).to permit(member, proposal)
-    end
-
-    it 'グループのメンバーでないユーザーにアクセスを拒否すること' do
-      expect(subject).not_to permit(other_user, proposal)
-    end
-  end
-
-  permissions :update?, :edit? do
-    it '提案の作成者にアクセスを許可すること' do
-      expect(subject).to permit(user, proposal)
-    end
-
-    it 'グループのオーナーにアクセスを許可すること' do
-      member_proposal = create(:proposal, group: group, user: member)
-      expect(subject).to permit(member, member_proposal)
-    end
-
-    it 'メンバーであっても作成者でもオーナーでもなければアクセスを拒否すること' do
-      expect(subject).not_to permit(member, proposal)
-    end
-
-    it 'グループのメンバーでないユーザーにアクセスを拒否すること' do
-      expect(subject).not_to permit(other_user, proposal)
-    end
-  end
-
-  permissions :destroy? do
+  permissions :update?, :edit?, :destroy? do
     it '提案の作成者にアクセスを許可すること' do
       expect(subject).to permit(user, proposal)
     end

@@ -68,4 +68,3 @@ class ProposalsController < ApplicationController
     params.require(:proposal).permit(:title, :content)
   end
 end
-

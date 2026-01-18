@@ -1,6 +1,6 @@
 class ProposalPolicy < ApplicationPolicy
   def index?
-    true
+    is_group_member?
   end
 
   def show?
@@ -8,11 +8,11 @@ class ProposalPolicy < ApplicationPolicy
   end
 
   def create?
-    is_group_member?
+    new?
   end
 
   def new?
-    create?
+    is_group_member?
   end
 
   def edit?
