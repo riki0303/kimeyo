@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 8.1.1'
+# Simple, powerful, and flexible forms for Rails [https://github.com/heartcombo/simple_form]
+gem 'simple_form'
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem 'propshaft'
 # Use mysql as the database for Active Record
