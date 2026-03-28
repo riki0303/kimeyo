@@ -38,5 +38,4 @@ RSpec.describe ProposalPolicy, type: :policy do
       expect(subject).not_to permit(other_user, proposal)
     end
   end
-
 end
