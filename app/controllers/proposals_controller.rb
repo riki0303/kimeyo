@@ -5,7 +5,7 @@ class ProposalsController < ApplicationController
     @group = current_user.groups.find(params[:group_id])
     # グループのメンバーであること
     authorize @group, :show?, policy_class: GroupPolicy
-    @proposals = policy_scope(Proposal).preload(:user).order(created_at: :desc)
+    @proposals = @group.proposals.preload(:user).order(created_at: :desc)
   end
 
   def show
