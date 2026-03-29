@@ -27,15 +27,6 @@ class ProposalPolicy < ApplicationPolicy
     creator_or_owner?
   end
 
-  class Scope < ApplicationPolicy::Scope
-    def resolve
-      # ユーザーが所属しているグループの提案のみ
-      scope.joins(:group)
-           .joins('INNER JOIN group_memberships ON group_memberships.group_id = groups.id')
-           .where(group_memberships: { user_id: user.id })
-    end
-  end
-
   private
 
   # グループのメンバーであること

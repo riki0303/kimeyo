@@ -38,16 +38,4 @@ RSpec.describe ProposalPolicy, type: :policy do
       expect(subject).not_to permit(other_user, proposal)
     end
   end
-
-  describe 'Scope' do
-    subject { described_class::Scope.new(user, Proposal).resolve }
-
-    it 'ユーザーがメンバーのグループの提案を含むこと' do
-      expect(subject).to include(proposal)
-    end
-
-    it 'ユーザーがメンバーでないグループの提案を含まないこと' do
-      expect(subject).not_to include(other_proposal)
-    end
-  end
 end

@@ -19,6 +19,7 @@ class GroupsController < ApplicationController
     @group = current_user.owned_groups.build(group_params)
     authorize @group
 
+    # TODO: 同一トランザクション内で処理を行うようにする
     if @group.save
       @group.add_owner_as_member
       redirect_to @group, notice: 'グループが作成されました。'

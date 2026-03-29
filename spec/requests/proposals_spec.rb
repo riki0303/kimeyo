@@ -27,6 +27,16 @@ RSpec.describe 'Proposals', type: :request do
         # 他のグループの提案は表示されないこと
         expect(response.body).not_to include(other_group_proposal.title)
       end
+
+      context 'userが複数グループに所属している場合' do
+        let!(:other_group_membership) { create(:group_membership, group: other_group, user: user) }
+
+        it '現在のグループの提案のみ表示されること' do
+          get group_proposals_path(group)
+          expect(response.body).to include(proposal.title)
+          expect(response.body).not_to include(other_group_proposal.title)
+        end
+      end
     end
 
     context 'ログインしていない場合' do
