@@ -12,8 +12,8 @@
         .card
           .card-body
             %h5.card-title= proposal.title
-            %p.card-text.text-muted
-              = proposal.content
+            .card-text.text-muted
+              = simple_format(truncate(proposal.content, length: 100))
             %p.card-text
               %small.text-muted
                 作成者: #{proposal.user.email}
