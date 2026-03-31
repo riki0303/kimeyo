@@ -35,3 +35,29 @@
       %strong 作成日時:
       = @proposal.created_at.strftime("%Y年%m月%d日 %H:%M")
 
+.card.mb-4
+  .card-header
+    %h5.mb-0 投票状況
+  .card-body
+    - approve_count = @proposal.votes.status_approve.count
+    - reject_count = @proposal.votes.status_reject.count
+    - member_count = @group.members.count
+    - threshold = (member_count / 2) + 1
+    %p
+      %span.badge.bg-success 賛成: #{approve_count}
+      %span.badge.bg-danger.ms-2 反対: #{reject_count}
+    %p.text-muted
+      決定には #{threshold} 票必要（メンバー数: #{member_count}）
+
+    - current_vote = @proposal.votes.find_by(user: current_user)
+    - if current_vote
+      %p
+        あなたの投票:
+        - if current_vote.status_approve?
+          %span.badge.bg-success 賛成
+        - else
+          %span.badge.bg-danger 反対
+    - elsif @proposal.user != current_user && policy(Vote.new(proposal: @proposal, user: current_user)).create?
+      .d-flex.gap-2
+        = button_to "賛成", proposal_votes_path(@proposal), params: { vote: { status: :approve } }, class: "btn btn-success btn-sm"
+        = button_to "反対", proposal_votes_path(@proposal), params: { vote: { status: :reject } }, class: "btn btn-danger btn-sm"

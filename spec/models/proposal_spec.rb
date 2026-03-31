@@ -79,6 +79,74 @@ RSpec.describe Proposal, type: :model do
     end
   end
 
+  describe '#update_status_by_votes!' do
+    let(:group) { create(:group) }
+    let(:proposal) { create(:proposal, group: group, user: group.owner) }
+
+    context '4人グループで3票 approve の場合' do
+      before do
+        3.times do
+          member = create(:user)
+          create(:group_membership, group: group, user: member)
+          create(:vote, proposal: proposal, user: member, status: :approve)
+        end
+      end
+
+      it 'approved になること' do
+        proposal.update_status_by_votes!
+        expect(proposal.reload.status).to eq('approved')
+      end
+    end
+
+    context '4人グループで3票 reject の場合' do
+      before do
+        3.times do
+          member = create(:user)
+          create(:group_membership, group: group, user: member)
+          create(:vote, proposal: proposal, user: member, status: :reject)
+        end
+      end
+
+      it 'rejected になること' do
+        proposal.update_status_by_votes!
+        expect(proposal.reload.status).to eq('rejected')
+      end
+    end
+
+    context '4人グループで2票のみの場合' do
+      before do
+        3.times do |i|
+          member = create(:user)
+          create(:group_membership, group: group, user: member)
+          create(:vote, proposal: proposal, user: member, status: :approve) if i < 2
+        end
+      end
+
+      it 'pending のままであること' do
+        proposal.update_status_by_votes!
+        expect(proposal.reload.status).to eq('pending')
+      end
+    end
+
+    context '5人グループで3票 approve の場合' do
+      before do
+        4.times do
+          member = create(:user)
+          create(:group_membership, group: group, user: member)
+        end
+        # 3人が approve
+        group.members.where.not(id: group.owner.id).limit(3).each do |member|
+          create(:vote, proposal: proposal, user: member, status: :approve)
+        end
+      end
+
+      it 'approved になること' do
+        proposal.update_status_by_votes!
+        expect(proposal.reload.status).to eq('approved')
+      end
+    end
+  end
+
   describe 'ステータス' do
     context 'enumで定義された値の場合' do
       it '有効であること' do

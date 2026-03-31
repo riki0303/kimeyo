@@ -19,5 +19,9 @@ Rails.application.routes.draw do
     resources :proposals
   end
 
+  resources :proposals, only: [] do
+    resources :votes, only: [ :create ]
+  end
+
   # Devise routes will be added after User model is generated
 end
