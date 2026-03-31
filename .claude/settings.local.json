@@ -2,7 +2,18 @@
   "permissions": {
     "allow": [
       "Skill(update-config)",
-      "Bash(bundle exec:*)"
+      "Bash(bundle exec:*)",
+      "Bash(gh issue:*)",
+      "Bash(git fetch:*)",
+      "Bash(git checkout:*)",
+      "Bash(git pull:*)",
+      "Skill(start-issue)",
+      "Bash(bin/rails generate:*)",
+      "Bash(bin/rails db:migrate 2>&1)",
+      "Bash(bin/rubocop 2>&1)",
+      "Bash(bin/brakeman --no-pager 2>&1)",
+      "Bash(bin/rails_best_practices 2>&1)",
+      "Bash(bin/rails routes:*)"
     ]
   }
 }
