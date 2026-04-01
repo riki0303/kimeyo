@@ -6,10 +6,10 @@ class Vote < ApplicationRecord
 
   validates :user_id, uniqueness: { scope: :proposal_id }
 
-  def save_with_status_update!
+  def process_create!
     ActiveRecord::Base.transaction do
       save!
-      proposal.update_status_by_votes!
+      proposal.handle_status_by_votes!
     end
   end
 end

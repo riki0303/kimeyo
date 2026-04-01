@@ -8,7 +8,7 @@ class Proposal < ApplicationRecord
   validates :title, presence: true, length: { maximum: 50 }
   validates :content, presence: true, length: { maximum: 500 }
 
-  def update_status_by_votes!
+  def handle_status_by_votes!
     member_count = group.members.count
     threshold = (member_count / 2) + 1
 

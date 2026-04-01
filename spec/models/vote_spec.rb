@@ -24,7 +24,7 @@ RSpec.describe Vote, type: :model do
     end
   end
 
-  describe '#save_with_status_update!' do
+  describe '#process_create!' do
     let(:owner) { create(:user) }
     let(:group) { create(:group, owner: owner) }
     let(:proposal) { create(:proposal, group: group, user: owner) }
@@ -40,13 +40,13 @@ RSpec.describe Vote, type: :model do
     it '投票が保存されること' do
       member = group.members.where.not(id: owner.id).first
       vote = proposal.votes.build(user: member, status: :approve)
-      expect { vote.save_with_status_update! }.to change(Vote, :count).by(1)
+      expect { vote.process_create! }.to change(Vote, :count).by(1)
     end
 
     it '閾値未満では proposal のステータスが変わらないこと' do
       member = group.members.where.not(id: owner.id).first
       vote = proposal.votes.build(user: member, status: :approve)
-      vote.save_with_status_update!
+      vote.process_create!
       expect(proposal.reload.status).to eq('pending')
     end
 
@@ -54,7 +54,7 @@ RSpec.describe Vote, type: :model do
       members = group.members.where.not(id: owner.id).to_a
       members[0..1].each { |u| create(:vote, proposal: proposal, user: u, status: :approve) }
       vote = proposal.votes.build(user: members[2], status: :approve)
-      vote.save_with_status_update!
+      vote.process_create!
       expect(proposal.reload.status).to eq('approved')
     end
 
@@ -62,7 +62,7 @@ RSpec.describe Vote, type: :model do
       member = group.members.where.not(id: owner.id).first
       create(:vote, proposal: proposal, user: member, status: :approve)
       duplicate = proposal.votes.build(user: member, status: :approve)
-      expect { duplicate.save_with_status_update! }.to raise_error(ActiveRecord::RecordInvalid)
+      expect { duplicate.process_create! }.to raise_error(ActiveRecord::RecordInvalid)
       expect(Vote.where(proposal: proposal, user: member).count).to eq(1)
     end
   end
