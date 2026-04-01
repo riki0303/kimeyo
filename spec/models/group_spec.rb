@@ -16,6 +16,21 @@ RSpec.describe Group, type: :model do
           expect(group.errors[:name]).to be_present
         end
       end
+
+      context '名前が50文字の場合' do
+        it '有効であること' do
+          group.name = 'a' * 50
+          expect(group).to be_valid
+        end
+      end
+
+      context '名前が51文字の場合' do
+        it '無効であること' do
+          group.name = 'a' * 51
+          expect(group).not_to be_valid
+          expect(group.errors[:name]).to be_present
+        end
+      end
     end
 
     describe 'オーナー' do
