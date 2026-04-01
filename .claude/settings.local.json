@@ -15,7 +15,9 @@
       "Bash(bin/rails_best_practices 2>&1)",
       "Bash(bin/rails routes:*)",
       "Bash(git add:*)",
-      "Skill(create-pr)"
+      "Skill(create-pr)",
+      "WebSearch",
+      "WebFetch(domain:github.com)"
     ]
   }
 }
