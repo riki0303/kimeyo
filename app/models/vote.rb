@@ -9,7 +9,7 @@ class Vote < ApplicationRecord
   def process_create!
     ActiveRecord::Base.transaction do
       save!
-      proposal.update_status_by_votes!
+      proposal.handle_status_by_votes!
     end
   end
 end

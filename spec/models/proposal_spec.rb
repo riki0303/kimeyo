@@ -79,7 +79,7 @@ RSpec.describe Proposal, type: :model do
     end
   end
 
-  describe '#update_status_by_votes!' do
+  describe '#handle_status_by_votes!' do
     let(:group) { create(:group) }
     let(:proposal) { create(:proposal, group: group, user: group.owner) }
 
@@ -93,7 +93,7 @@ RSpec.describe Proposal, type: :model do
       end
 
       it 'approved になること' do
-        proposal.update_status_by_votes!
+        proposal.handle_status_by_votes!
         expect(proposal.reload.status).to eq('approved')
       end
     end
@@ -108,7 +108,7 @@ RSpec.describe Proposal, type: :model do
       end
 
       it 'rejected になること' do
-        proposal.update_status_by_votes!
+        proposal.handle_status_by_votes!
         expect(proposal.reload.status).to eq('rejected')
       end
     end
@@ -123,7 +123,7 @@ RSpec.describe Proposal, type: :model do
       end
 
       it 'pending のままであること' do
-        proposal.update_status_by_votes!
+        proposal.handle_status_by_votes!
         expect(proposal.reload.status).to eq('pending')
       end
     end
@@ -141,7 +141,7 @@ RSpec.describe Proposal, type: :model do
       end
 
       it 'approved になること' do
-        proposal.update_status_by_votes!
+        proposal.handle_status_by_votes!
         expect(proposal.reload.status).to eq('approved')
       end
     end
