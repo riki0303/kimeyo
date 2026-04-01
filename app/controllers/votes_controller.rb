@@ -7,7 +7,7 @@ class VotesController < ApplicationController
     @vote = @proposal.votes.build(vote_params.merge(user: current_user))
     authorize @vote
 
-    @vote.save_with_status_update!
+    @vote.process_create!
     redirect_to group_proposal_path(@group, @proposal), notice: '投票しました。'
   rescue ActiveRecord::RecordInvalid
     redirect_to group_proposal_path(@group, @proposal), alert: '投票に失敗しました。'
