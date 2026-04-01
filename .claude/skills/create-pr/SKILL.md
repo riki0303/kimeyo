@@ -26,7 +26,7 @@ allowed-tools: Bash
 git push -u origin <current-branch>
 ```
 
-pre-push フックが ChromeDriver/Chrome のバージョン不一致による system テスト失敗でブロックされた場合は、既知の問題（Issue #51）のため `--no-verify` を付けて再実行してよい。それ以外のフック失敗は原因を調査して修正する。
+pre-push フックが失敗した場合は原因を調査して修正する。
 
 ### Step 3: PR タイトルと本文を生成する
 
