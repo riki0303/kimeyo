@@ -8,6 +8,22 @@
   - if policy(@group).destroy?
     = button_to "削除", group_path(@group), method: :delete, class: "btn btn-danger", form: { data: { turbo_confirm: "本当に削除しますか？" } }
 
+- if policy(@invitation).create?
+  .card.mb-4
+    .card-header
+      %h5.mb-0 招待リンク
+    .card-body
+      - if @invitation.persisted?
+        .mb-2
+          = text_field_tag :invitation_url, group_invitation_url(@invitation.token),
+              class: "form-control", readonly: true
+        %small.text-muted
+          有効期限:
+          = l @invitation.expires_at, format: :short
+      - else
+        = button_to "招待リンクを生成", group_group_invitations_path(@group),
+            method: :post, class: "btn btn-outline-primary"
+
 .card.mb-4
   .card-header
     %h5.mb-0 グループ詳細
