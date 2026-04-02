@@ -8,6 +8,7 @@ class GroupsController < ApplicationController
 
   def show
     authorize @group
+    @invitation = @group.group_invitations.active.last || @group.group_invitations.build
   end
 
   def new

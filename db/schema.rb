@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_31_120954) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_02_081257) do
+  create_table "group_invitations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "created_by", null: false
+    t.datetime "expires_at", null: false
+    t.bigint "group_id", null: false
+    t.string "token", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "used_at"
+    t.index ["created_by"], name: "fk_rails_2237d831dc"
+    t.index ["group_id"], name: "index_group_invitations_on_group_id"
+    t.index ["token"], name: "index_group_invitations_on_token", unique: true
+  end
+
   create_table "group_memberships", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "group_id", null: false
@@ -64,6 +77,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_31_120954) do
     t.index ["user_id"], name: "index_votes_on_user_id"
   end
 
+  add_foreign_key "group_invitations", "groups"
+  add_foreign_key "group_invitations", "users", column: "created_by"
   add_foreign_key "group_memberships", "groups"
   add_foreign_key "group_memberships", "users"
   add_foreign_key "groups", "users", column: "owner_id"

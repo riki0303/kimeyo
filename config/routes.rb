@@ -17,7 +17,10 @@ Rails.application.routes.draw do
 
   resources :groups do
     resources :proposals
+    resources :group_invitations, only: [ :create ]
   end
+
+  resources :group_invitations, only: [ :show ], param: :token
 
   resources :proposals, only: [] do
     resources :votes, only: [ :create ]
