@@ -8,31 +8,21 @@ class GroupInvitation < ApplicationRecord
   validates :token, presence: true, uniqueness: true
   validates :expires_at, presence: true
 
-  scope :active, -> { where(used_at: nil).where('expires_at > ?', Time.current) }
+  scope :active, -> { where('expires_at > ?', Time.current) }
 
   # 期限切れか？
   def expired?
     expires_at < Time.current
   end
 
-  def used?
-    used_at.present?
-  end
-
   def valid_invitation?
-    !expired? && !used?
-  end
-
-  def use!
-    update!(used_at: Time.current)
+    !expired?
   end
 
   def accept!(user)
-    ActiveRecord::Base.transaction do
-      already_member = group.members.include?(user)
-      group.group_memberships.create!(user: user) unless already_member
-      use! unless already_member
-    end
+    return if group.members.include?(user)
+
+    group.group_memberships.create!(user: user)
   end
 
   private
