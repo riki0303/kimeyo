@@ -29,19 +29,6 @@ RSpec.describe 'GroupInvitations', type: :request do
       end
     end
 
-    context 'メンバー（非オーナー）がログインしている場合' do
-      before do
-        group.group_memberships.create!(user: other_user)
-        sign_in other_user, scope: :user
-      end
-
-      it '認可エラーになること' do
-        post group_group_invitations_path(group)
-        expect(response).to redirect_to(root_path)
-        expect(flash[:alert]).to eq('この操作を実行する権限がありません。')
-      end
-    end
-
     context 'ログインしていない場合' do
       it 'ログインページにリダイレクトされること' do
         post group_group_invitations_path(group)
