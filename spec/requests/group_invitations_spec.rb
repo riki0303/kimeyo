@@ -14,6 +14,19 @@ RSpec.describe 'GroupInvitations', type: :request do
         expect(response).to redirect_to(group_path(group))
         expect(flash[:notice]).to eq('招待リンクを生成しました')
       end
+
+      it 'リセットで新トークンが発行され古いトークンが無効になること' do
+        post group_group_invitations_path(group)
+        old_token = GroupInvitation.last.token
+
+        post group_group_invitations_path(group)
+        new_invitation = GroupInvitation.last
+
+        expect(new_invitation.token).not_to eq(old_token)
+        old_invitation = GroupInvitation.find_by(token: old_token)
+        expect(old_invitation).to be_present
+        expect(old_invitation).to be_expired
+      end
     end
 
     context 'ログインしていない場合' do
@@ -44,6 +57,23 @@ RSpec.describe 'GroupInvitations', type: :request do
           get group_invitation_path(token: invitation.token)
         }.not_to change { group.members.count }
       end
+
+      it '複数人が同一リンクで参加できること' do
+        user2 = create(:user)
+        user3 = create(:user)
+
+        sign_in other_user, scope: :user
+        get group_invitation_path(token: invitation.token)
+        expect(group.members).to include(other_user)
+
+        sign_in user2, scope: :user
+        get group_invitation_path(token: invitation.token)
+        expect(group.members).to include(user2)
+
+        sign_in user3, scope: :user
+        get group_invitation_path(token: invitation.token)
+        expect(group.members).to include(user3)
+      end
     end
 
     context '未ログインユーザーが有効なリンクにアクセスした場合' do
@@ -71,18 +101,6 @@ RSpec.describe 'GroupInvitations', type: :request do
 
       it 'ルートにリダイレクトすること' do
         get group_invitation_path(token: expired_invitation.token)
-        expect(response).to redirect_to(root_path)
-        expect(flash[:alert]).to eq('招待リンクが無効または期限切れです')
-      end
-    end
-
-    context '使用済みのリンクの場合' do
-      let!(:used_invitation) { create(:group_invitation, :used, group: group, created_by: owner) }
-
-      before { sign_in other_user, scope: :user }
-
-      it 'ルートにリダイレクトすること' do
-        get group_invitation_path(token: used_invitation.token)
         expect(response).to redirect_to(root_path)
         expect(flash[:alert]).to eq('招待リンクが無効または期限切れです')
       end

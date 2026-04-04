@@ -7,6 +7,13 @@ class Group < ApplicationRecord
 
   validates :name, presence: true, length: { maximum: 50 }
 
+  def reset_invitation!(user)
+    ActiveRecord::Base.transaction do
+      group_invitations.active.each { |invitation| invitation.update!(expires_at: Time.current) }
+      group_invitations.create!(created_by: user)
+    end
+  end
+
   def process_create!
     ActiveRecord::Base.transaction do
       save!

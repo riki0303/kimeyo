@@ -20,7 +20,8 @@
       "WebFetch(domain:github.com)",
       "Bash(grep:*)",
       "Bash(bin/rubocop:*)",
-      "Skill(define-requirements)"
+      "Skill(define-requirements)",
+      "Bash(bin/rails_best_practices .:*)"
     ]
   }
 }

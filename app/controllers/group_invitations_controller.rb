@@ -6,11 +6,10 @@ class GroupInvitationsController < ApplicationController
     @group = Group.find(params[:group_id])
     @invitation = @group.group_invitations.build(created_by: current_user)
     authorize @invitation
-    if @invitation.save
-      redirect_to group_path(@group), notice: '招待リンクを生成しました'
-    else
-      redirect_to group_path(@group), alert: '招待リンクの生成に失敗しました'
-    end
+    @group.reset_invitation!(current_user)
+    redirect_to group_path(@group), notice: '招待リンクを生成しました'
+  rescue ActiveRecord::RecordInvalid
+    redirect_to group_path(@group), alert: '招待リンクの生成に失敗しました'
   end
 
   def show

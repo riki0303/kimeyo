@@ -17,9 +17,12 @@
         .mb-2
           = text_field_tag :invitation_url, group_invitation_url(@invitation.token),
               class: "form-control", readonly: true
-        %small.text-muted
-          有効期限:
-          = l @invitation.expires_at, format: :short
+        .d-flex.align-items-center.gap-3
+          %small.text-muted
+            有効期限:
+            = l @invitation.expires_at, format: :short
+          = button_to "リンクをリセット", group_group_invitations_path(@group),
+              method: :post, class: "btn btn-sm btn-outline-secondary"
       - else
         = button_to "招待リンクを生成", group_group_invitations_path(@group),
             method: :post, class: "btn btn-outline-primary"
