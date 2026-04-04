@@ -13,7 +13,6 @@ class GroupInvitationsController < ApplicationController
   end
 
   def show
-    skip_authorization
     if user_signed_in?
       # TODO: 例外のハンドリング処理を書く必要がある。または例外を発生させないようにする
       @invitation.accept!(current_user)
