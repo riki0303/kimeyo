@@ -23,7 +23,9 @@ RSpec.describe 'GroupInvitations', type: :request do
         new_invitation = GroupInvitation.last
 
         expect(new_invitation.token).not_to eq(old_token)
-        expect(GroupInvitation.where(token: old_token)).not_to exist
+        old_invitation = GroupInvitation.find_by(token: old_token)
+        expect(old_invitation).to be_present
+        expect(old_invitation).to be_expired
       end
     end
 

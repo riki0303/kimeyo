@@ -9,7 +9,7 @@ class Group < ApplicationRecord
 
   def reset_invitation!(user)
     ActiveRecord::Base.transaction do
-      group_invitations.active.destroy_all
+      group_invitations.active.each { |invitation| invitation.update!(expires_at: Time.current) }
       group_invitations.create!(created_by: user)
     end
   end
