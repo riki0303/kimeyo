@@ -1,7 +1,7 @@
-%h1.mb-4 グループ編集
-
-= render "form"
-
-= link_to "一覧に戻る", groups_path, class: "btn btn-link"
-= link_to "詳細に戻る", group_path(@group), class: "btn btn-link"
-
+.row.justify-content-center
+  .col-md-6
+    .card
+      .card-header
+        %h4.mb-0 グループ編集
+      .card-body
+        = render "form"

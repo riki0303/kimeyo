@@ -16,9 +16,14 @@
     = stylesheet_link_tag :app, "data-turbo-track": "reload"
     = javascript_include_tag "application", "data-turbo-track": "reload", type: "module"
   %body
-    - if notice
-      %p.notice= notice
-    - if alert
-      %p.alert= alert
-    .container.mt-3
+    = render "shared/navbar"
+    .container.mt-4
+      - if notice
+        .alert.alert-success.alert-dismissible.fade.show{ role: "alert" }
+          = notice
+          %button.btn-close{ type: "button", "data-bs-dismiss": "alert", "aria-label": "Close" }
+      - if alert
+        .alert.alert-danger.alert-dismissible.fade.show{ role: "alert" }
+          = alert
+          %button.btn-close{ type: "button", "data-bs-dismiss": "alert", "aria-label": "Close" }
       = yield

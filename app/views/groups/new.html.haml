@@ -1,6 +1,7 @@
-%h1.mb-4 新規グループ作成
-
-= render "form"
-
-= link_to "一覧に戻る", groups_path, class: "btn btn-link"
-
+.row.justify-content-center
+  .col-md-6
+    .card
+      .card-header
+        %h4.mb-0 新規グループ作成
+      .card-body
+        = render "form"

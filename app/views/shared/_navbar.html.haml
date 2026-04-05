@@ -1,0 +1,19 @@
+%nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+  .container
+    = link_to "Kimeyo", root_path, class: "navbar-brand fw-bold"
+    %button.navbar-toggler{ type: "button", "data-bs-toggle": "collapse", "data-bs-target": "#navbarMain" }
+      %span.navbar-toggler-icon
+    #navbarMain.collapse.navbar-collapse
+      %ul.navbar-nav.ms-auto.align-items-center
+        - if user_signed_in?
+          %li.nav-item
+            = link_to "グループ一覧", groups_path, class: "nav-link"
+          %li.nav-item
+            %span.nav-link.text-light= current_user.email
+          %li.nav-item
+            = button_to "ログアウト", destroy_user_session_path, method: :delete, class: "btn btn-outline-light btn-sm ms-2"
+        - else
+          %li.nav-item
+            = link_to "ログイン", new_user_session_path, class: "nav-link"
+          %li.nav-item
+            = link_to "新規登録", new_user_registration_path, class: "btn btn-primary btn-sm ms-2"
