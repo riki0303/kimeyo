@@ -1,23 +1,18 @@
-%h2
-  Edit #{resource_name.to_s.humanize}
-= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
-  = f.error_notification
-
-  = f.input :email, autofocus: true, autocomplete: "email"
-
-  - if devise_mapping.confirmable? && resource.pending_reconfirmation?
-    %div
-      Currently waiting confirmation for: #{resource.unconfirmed_email}
-
-  = f.input :password, autocomplete: "new-password", hint: "leave blank if you don't want to change it", required: false, input_html: { value: "" }
-
-  = f.input :password_confirmation, autocomplete: "new-password", required: false, input_html: { value: "" }
-
-  = f.input :current_password, hint: "we need your current password to confirm your changes", autocomplete: "current-password"
-
-  = f.button :submit, "Update", class: "btn btn-primary"
-
-%h3 Cancel my account
-%div
-  Unhappy? #{button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete}
-= link_to "Back", :back
+.row.justify-content-center.mt-5
+  .col-md-5.col-lg-4
+    .card
+      .card-header.text-center
+        %h4.mb-0 アカウント編集
+      .card-body
+        = simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
+          = f.error_notification
+          = f.input :name, label: "名前", placeholder: "名前を入力してください"
+          = f.input :email, autofocus: true, autocomplete: "email", label: "メールアドレス"
+          - if devise_mapping.confirmable? && resource.pending_reconfirmation?
+            .mb-2
+              = "現在確認待ち: #{resource.unconfirmed_email}"
+          = f.input :password, autocomplete: "new-password", label: "新しいパスワード", hint: "変更しない場合は空欄にしてください", required: false, input_html: { value: "" }
+          = f.input :password_confirmation, autocomplete: "new-password", label: "パスワード確認", required: false, input_html: { value: "" }
+          = f.input :current_password, autocomplete: "current-password", label: "現在のパスワード", hint: "変更を確認するために現在のパスワードが必要です"
+          = f.button :submit, "更新する", class: "btn btn-primary w-100 mt-2"
+        = render "devise/shared/links"
