@@ -198,4 +198,5 @@ RSpec.describe 'Groups', type: :request do
       end
     end
   end
+
 end
