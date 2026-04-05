@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
     if (token = session.delete(:invitation_token))
       handle_invitation_after_auth(token, resource)
     else
-      super
+      groups_path
     end
   end
 
