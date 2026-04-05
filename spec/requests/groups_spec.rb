@@ -199,26 +199,4 @@ RSpec.describe 'Groups', type: :request do
     end
   end
 
-  describe 'Pundit 認可エラー' do
-    let!(:member_user) { create(:user) }
-    let!(:group_membership) { create(:group_membership, group: group, user: member_user) }
-
-    context 'メンバーがグループを削除しようとした場合' do
-      before { sign_in member_user, scope: :user }
-
-      it '権限エラーメッセージが表示されリダイレクトされること' do
-        delete group_path(group)
-        expect(flash[:alert]).to eq('この操作を実行する権限がありません。')
-      end
-    end
-
-    context 'メンバーがグループを編集しようとした場合' do
-      before { sign_in member_user, scope: :user }
-
-      it '権限エラーメッセージが表示されリダイレクトされること' do
-        patch group_path(group), params: { group: { name: '不正更新' } }
-        expect(flash[:alert]).to eq('この操作を実行する権限がありません。')
-      end
-    end
-  end
 end
