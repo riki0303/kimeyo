@@ -90,4 +90,7 @@ group :test do
   gem 'rspec-rails'
   # Factory for creating test data [https://github.com/thoughtbot/factory_bot]
   gem 'factory_bot_rails'
+
+  # Code coverage analysis [https://github.com/simplecov-ruby/simplecov]
+  gem 'simplecov', require: false
 end

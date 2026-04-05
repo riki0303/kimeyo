@@ -121,5 +121,27 @@ RSpec.describe 'GroupInvitations', type: :request do
       expect(response).to redirect_to(group_path(group))
       expect(group.members).to include(new_user)
     end
+
+    it 'セッションに期限切れのトークンがある場合、ログイン後にルートにリダイレクトすること' do
+      expired_invitation = create(:group_invitation, :expired, group: group, created_by: owner)
+
+      # 未ログインで期限切れ招待リンクにアクセス試行（期限切れなのでルートへ）
+      get group_invitation_path(token: expired_invitation.token)
+      expect(response).to redirect_to(root_path)
+
+      # セッションにトークンを直接設定するために有効な招待のURLにアクセスしてからexpire
+      # 有効な招待で未ログインアクセス -> セッションにトークンが保存される
+      valid_invitation = create(:group_invitation, group: group, created_by: owner)
+      get group_invitation_path(token: valid_invitation.token)
+      expect(response).to redirect_to(new_user_session_path)
+
+      # 招待を期限切れにする
+      valid_invitation.update!(expires_at: 1.day.ago)
+
+      # ログイン -> セッションのトークンが期限切れなのでルートにリダイレクト
+      post user_session_path, params: { user: { email: new_user.email, password: 'password123' } }
+      expect(response).to redirect_to(root_path)
+      expect(flash[:alert]).to eq('招待リンクが無効または期限切れです')
+    end
   end
 end
