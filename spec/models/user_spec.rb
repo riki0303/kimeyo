@@ -7,6 +7,31 @@ RSpec.describe User, type: :model do
       end
     end
 
+    describe '名前' do
+      context '名前が空の場合' do
+        it '無効であること' do
+          user = build(:user, name: '')
+          expect(user).not_to be_valid
+          expect(user.errors[:name]).to be_present
+        end
+      end
+
+      context '名前が50文字以内の場合' do
+        it '有効であること' do
+          user = build(:user, name: 'a' * 50)
+          expect(user).to be_valid
+        end
+      end
+
+      context '名前が51文字以上の場合' do
+        it '無効であること' do
+          user = build(:user, name: 'a' * 51)
+          expect(user).not_to be_valid
+          expect(user.errors[:name]).to be_present
+        end
+      end
+    end
+
     describe 'メールアドレス' do
       context 'メールアドレスが空の場合' do
         it '無効であること' do
