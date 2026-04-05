@@ -34,6 +34,7 @@
       %strong 作成日時:
       = @proposal.created_at.strftime("%Y年%m月%d日 %H:%M")
 
+-# TODO: viewからロジックを分離する
 .card.mb-4
   .card-header
     %h5.mb-0 投票状況
@@ -42,21 +43,45 @@
     - reject_count = @proposal.votes.status_reject.count
     - member_count = @group.members.count
     - threshold = (member_count / 2) + 1
-    %p
-      %span.badge.bg-success 賛成: #{approve_count}
-      %span.badge.bg-danger.ms-2 反対: #{reject_count}
-    %p.text-muted
+    - total_votes = approve_count + reject_count
+    - approve_pct = total_votes > 0 ? (approve_count.to_f / total_votes * 100).round : 0
+    - reject_pct = total_votes > 0 ? 100 - approve_pct : 0
+
+    .d-flex.gap-3.mb-3
+      %span.badge.bg-success.fs-6
+        %i.bi.bi-hand-thumbs-up.me-1
+        賛成 #{approve_count}
+      %span.badge.bg-danger.fs-6
+        %i.bi.bi-hand-thumbs-down.me-1
+        反対 #{reject_count}
+
+    - if total_votes > 0
+      .progress.mb-2{ style: "height: 20px" }
+        .progress-bar.bg-success{ role: "progressbar", style: "width: #{approve_pct}%", "aria-valuenow": approve_count, "aria-valuemin": "0", "aria-valuemax": total_votes }
+          #{approve_pct}%
+        .progress-bar.bg-danger{ role: "progressbar", style: "width: #{reject_pct}%", "aria-valuenow": reject_count, "aria-valuemin": "0", "aria-valuemax": total_votes }
+          #{reject_pct}%
+
+    %p.text-muted.small
       決定には #{threshold} 票必要（メンバー数: #{member_count}）
 
     - current_vote = @proposal.votes.find_by(user: current_user)
     - if current_vote
-      %p
+      .alert.alert-secondary.py-2
         あなたの投票:
         - if current_vote.status_approve?
-          %span.badge.bg-success 賛成
+          %span.badge.bg-success
+            %i.bi.bi-hand-thumbs-up.me-1
+            賛成
         - else
-          %span.badge.bg-danger 反対
+          %span.badge.bg-danger
+            %i.bi.bi-hand-thumbs-down.me-1
+            反対
     - elsif @proposal.user != current_user && policy(Vote.new(proposal: @proposal, user: current_user)).create?
       .d-flex.gap-2
-        = button_to "賛成", proposal_votes_path(@proposal), params: { vote: { status: :approve } }, class: "btn btn-success btn-sm"
-        = button_to "反対", proposal_votes_path(@proposal), params: { vote: { status: :reject } }, class: "btn btn-danger btn-sm"
+        = button_to proposal_votes_path(@proposal), params: { vote: { status: :approve } }, class: "btn btn-success" do
+          %i.bi.bi-hand-thumbs-up.me-1
+          賛成
+        = button_to proposal_votes_path(@proposal), params: { vote: { status: :reject } }, class: "btn btn-danger" do
+          %i.bi.bi-hand-thumbs-down.me-1
+          反対

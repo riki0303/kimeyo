@@ -1,11 +1,13 @@
-%h2 Log in
-= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-  = f.input :email, autofocus: true, autocomplete: "email"
-
-  = f.input :password, autocomplete: "current-password"
-
-  - if devise_mapping.rememberable?
-    = f.input :remember_me, as: :boolean
-
-  = f.button :submit, "Log in", class: "btn btn-primary"
-= render "devise/shared/links"
+.row.justify-content-center.mt-5
+  .col-md-5.col-lg-4
+    .card
+      .card-header.text-center
+        %h4.mb-0 ログイン
+      .card-body
+        = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+          = f.input :email, autofocus: true, autocomplete: "email", label: "メールアドレス"
+          = f.input :password, autocomplete: "current-password", label: "パスワード"
+          - if devise_mapping.rememberable?
+            = f.input :remember_me, as: :boolean, label: "ログイン状態を保持する"
+          = f.button :submit, "ログイン", class: "btn btn-primary w-100 mt-2"
+        = render "devise/shared/links"
