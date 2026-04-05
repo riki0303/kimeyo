@@ -20,7 +20,7 @@ class ProposalPolicy < ApplicationPolicy
   end
 
   def update?
-    creator_or_owner?
+    creator_or_owner? && record.votes.empty?
   end
 
   def destroy?
