@@ -48,7 +48,7 @@ RSpec.describe ApplicationPolicy, type: :policy do
   end
 
   describe 'Scope' do
-    it 'resolveメソッドがNotImplementedErrorを発生させること' do
+    it 'resolveメソッドがNoMethodErrorを発生させること' do
       scope = described_class::Scope.new(user, double('scope'))
       expect { scope.resolve }.to raise_error(NoMethodError)
     end
