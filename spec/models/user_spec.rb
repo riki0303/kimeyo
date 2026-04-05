@@ -16,6 +16,14 @@ RSpec.describe User, type: :model do
         end
       end
 
+      context '名前がnilの場合' do
+        it '無効であること' do
+          user = build(:user, name: nil)
+          expect(user).not_to be_valid
+          expect(user.errors[:name]).to be_present
+        end
+      end
+
       context '名前が50文字以内の場合' do
         it '有効であること' do
           user = build(:user, name: 'a' * 50)
